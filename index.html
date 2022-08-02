@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoList</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id = "container">
+
+        <div id = "container">
+            <h1>To Do Manager</h1>
+        </div>
+
+        <div id = "inputform">
+            <form id = "form">
+                <label for="task">Task</label>
+                <input class="in" type="text" id="task" name="task" required />
+                <br>
+                <label for="assignee">Assignee</label>
+                <input class="in" type="text" id="assignee" name="assignee" required />
+                <br>
+                <label for="due-date">Due Date</label>
+                <input class="in" type="date" id="due-date" name="due-date" required />
+                <br>
+                <input type="submit" value="Add" id="add" />
+            </form>
+        </div><br>
+
+        <div id = "in-progress">
+            <h2>In Progress</h2>
+            <table id = "currenttasks">
+                <tr>
+                    <th>Task</th>
+                    <th>Assignee</th>
+                    <th>Due Date</th>
+                    <th>Mark Done</th>
+                </tr> 
+            </table>
+        </div><br>
+
+        <div id = "completed">
+            <h2>Completed</h2>
+            <table id = "completedtasks">
+                <tr>
+                    <th>Task</th>
+                    <th>Assignee</th>
+                    <th>Due Date</th>
+                    <th>Done</th>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="script.js" defer></script>
+
+</body>
+</html>
