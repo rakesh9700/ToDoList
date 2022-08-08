@@ -1,70 +1,90 @@
-let add = document.querySelector("#add");
-let inputform = add.parentNode;
-
-let inprogress = document.querySelector("#currenttasks");
-let completed = document.querySelector("#completedtasks");
-
-let uniqueid = 0;
-
-let addTask = (task,assignee,date) => {
-   let newtask = document.createElement("tr");
-
-   let cell1 = document.createElement("td");
-   cell1.innerHTML = task;
-
-   let cell2 = document.createElement("td");
-   cell2.innerHTML = assignee;
-
-   let cell3 = document.createElement("td");
-   cell3.innerHTML = date.split("-").reverse().join("-");
-
-   let cell4 = document.createElement("td");
-   let checkbox = document.createElement("input");
-   checkbox.type = "checkbox";
-   checkbox.addEventListener("click",deleteTask);
-   checkbox.id = uniqueid++;
-   cell4.appendChild(checkbox);
-
-   newtask.appendChild(cell1);
-   newtask.appendChild(cell2);
-   newtask.appendChild(cell3);
-   newtask.appendChild(cell4);
-   inprogress.appendChild(newtask);
-}
-
-let deleteTask = (e) => {
-    let found = e.target.id;
-    let task = document.getElementById(found);
-    let child = task.closest("tr");
-    let parent = task.parentNode;
-    parent.removeChild(task);
-    completed.appendChild(child);
-}
-
-let validation = (task,assignee,date) => {
-    let currdate = new Date();
-    currdate.setHours(0, 0, 0, 0);
-    if(task == "" || assignee == "" || date == "" || date < currdate){
-        return false;
+var submit = document.getElementById("submit");
+var form = document.getElementById("inputform");
+var inprogress = document.getElementById("currenttasks");
+var completed = document.querySelector("#completedtasks");
+var tasks = 0;
+var assigneeNames = [
+    "Abdul", "Anubhv", "Chetan",
+    "Hari", "Jayesh", "Prabhjot",
+    "Rahul", "Rakesh", "Rishab",
+    "Sarthak", "Shibo"
+];
+var statusEnum;
+(function (statusEnum) {
+    statusEnum[statusEnum["inProgress"] = 0] = "inProgress";
+    statusEnum[statusEnum["Completed"] = 1] = "Completed";
+})(statusEnum || (statusEnum = {}));
+var taskList = [];
+var createAssigneDropdown = function (assigneeNames) {
+    var select = document.getElementById("assignee");
+    for (var _i = 0, assigneeNames_1 = assigneeNames; _i < assigneeNames_1.length; _i++) {
+        var name_1 = assigneeNames_1[_i];
+        var option = document.createElement("option");
+        option.value = name_1;
+        var optionValue = document.createTextNode(name_1);
+        option.appendChild(optionValue);
+        select.appendChild(option);
     }
-    return true;
-}
-
-let inputvalues = (e) => {
-    e.preventDefault();
-
-    let data = new FormData(inputform);
-    let task = data.get("task");
-    let assignee = data.get("assignee");
-    let date = data.get("due-date");   
-
-    if(validation(task,assignee,date)){
-        addTask(task,assignee,date);
+};
+createAssigneDropdown(assigneeNames);
+var clearFormFields = function () {
+    var form = document.getElementById("inputform");
+    form.reset();
+};
+var addTask = function (task, assignee, date) {
+    var newTask = {
+        taskName: task,
+        assigneName: assignee,
+        date: new Date(date),
+        taskStatus: statusEnum.inProgress,
+        taskId: tasks++
+    };
+    taskList.push(newTask);
+    var newTaskRow = inprogress.insertRow(-1);
+    var newTaskName = newTaskRow.insertCell(0);
+    var newTaskContent = document.createTextNode(task);
+    newTaskName.appendChild(newTaskContent);
+    var newAssigneeName = newTaskRow.insertCell(1);
+    var newAssigneeContent = document.createTextNode(assignee);
+    newAssigneeName.appendChild(newAssigneeContent);
+    var newDate = newTaskRow.insertCell(2);
+    var newDateContent = document.createTextNode(date);
+    newDate.appendChild(newDateContent);
+    var newCheckbox = newTaskRow.insertCell(3);
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    newCheckbox.appendChild(checkbox);
+    checkbox.addEventListener("click", function (event) { return deleteTask(checkbox, newTask); });
+    clearFormFields();
+};
+var deleteTask = function (checkbox, newTask) {
+    var RowElement = checkbox.parentElement.parentElement;
+    RowElement.remove();
+    taskList[newTask.taskId].taskStatus = statusEnum.Completed;
+    checkbox.disabled = true;
+    completed.appendChild(RowElement);
+};
+var isValidatedTrue = function (task, assignee, date) {
+    var currDate = new Date().toLocaleDateString();
+    var dateArray = currDate.split('/');
+    var newDate = dateArray[1] + '-' + dateArray[0] + '-' + dateArray[2];
+    if ((task.trim() != "") && (assignee.trim() != "") && (assignee.trim() != "none") && (date.trim() != "") && (date.trim() >= newDate)) {
+        return true;
     }
-    else{
-     alert("ENTER CORRECT DETAILS");
+    return false;
+};
+var extractAndValidate = function (event) {
+    event.preventDefault();
+    var task = form.elements["task"].value;
+    console.log(form.elements);
+    var assignee = form.elements["assignee"].value;
+    var date = form.elements["due-date"].value;
+    date = date.split('-').reverse().join("-");
+    if (isValidatedTrue(task, assignee, date)) {
+        addTask(task, assignee, date);
     }
- }
-
-add.addEventListener("click",inputvalues);
-
+    else {
+        alert("Please enter correct details");
+    }
+};
+submit.addEventListener("click", extractAndValidate);

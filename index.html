@@ -5,31 +5,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDoList</title>
+    <title>To-Do List</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div id = "container">
 
-        <div id = "container">
+        <div id="heading-div">
             <h1>To Do Manager</h1>
         </div>
 
-        <div id = "inputform">
-            <form id = "form">
-                <label for="task">Task</label>
-                <input class="in" type="text" id="task" name="task" required />
+        <div id="form-div">
+            <form id = "inputform">
+                <label for="task">Enter task below</label><br>
+                <input type="text" id="task" name="task" autocomplete="off" required/>
                 <br>
-                <label for="assignee">Assignee</label>
-                <input class="in" type="text" id="assignee" name="assignee" required />
+
+                <label for="assignee">Select Assignee</label><br>
+                <!-- <input class="in" type="text" id="assignee" name="assignee" required /> -->
+                <select name="assignee" id="assignee" form="inputform">
+                    <option value="none" selected=""true disabled="disabled" hidden="hidden">Click to Dropdown</option>
+                </select>
                 <br>
-                <label for="due-date">Due Date</label>
-                <input class="in" type="date" id="due-date" name="due-date" required />
+
+                <label for="due-date">Pick Due-Date</label><br>
+                <input type="date" id="due-date" name="due-date" required/>
                 <br>
-                <input type="submit" value="Add" id="add" />
+
+                <input type="submit" value="Add Task" id="submit"/>
             </form>
-        </div><br>
+        </div>
 
         <div id = "in-progress">
             <h2>In Progress</h2>
@@ -38,10 +44,10 @@
                     <th>Task</th>
                     <th>Assignee</th>
                     <th>Due Date</th>
-                    <th>Mark Done</th>
+                    <th>Status</th>
                 </tr> 
             </table>
-        </div><br>
+        </div>
 
         <div id = "completed">
             <h2>Completed</h2>
@@ -50,14 +56,13 @@
                     <th>Task</th>
                     <th>Assignee</th>
                     <th>Due Date</th>
-                    <th>Done</th>
-                </tr>
+                    <th>Status</th>
+                </tr> 
             </table>
         </div>
-
+        
     </div>
-
+    
     <script src="script.js" defer></script>
-
 </body>
 </html>
